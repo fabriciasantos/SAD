@@ -1,4 +1,5 @@
-
+create database PROJETOSAD
+use PROJETOSAD
 -----------------------------------------------------
 --             TABELA ENDEREÇO
 -----------------------------------------------------
@@ -29,7 +30,7 @@ CREATE TABLE TB_Usuario (
   USU_Digital VARBINARY(MAX) NOT NULL,
   END_Codigo INT NOT NULL)
 
-ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo,END_Codigo)
+ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo)
 ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_Codigo) REFERENCES TB_Endereco(END_Codigo)
 
 -----------------------------------------------------
@@ -43,10 +44,10 @@ CREATE TABLE TB_Aluno (
   USU_Codigo INT NOT NULL,
   END_Codigo INT NOT NULL)
  
- ALTER TABLE TB_Aluno ADD CONSTRAINT PK_ALUNO_CODIGO PRIMARY KEY (ALU_Codigo, END_Codigo)
- ALTER TABLE TB_Aluno ADD CONSTRAINT FK_TB_USUARIO_USU_CODIGO FOREIGN KEY (USU_Codigo) 
+ ALTER TABLE TB_Aluno add CONSTRAINT PK_ALUNO_CODIGO primary key (ALU_CODIGO)
+ ALTER TABLE TB_Aluno ADD CONSTRAINT FK_USU_CODIGO FOREIGN KEY (USU_Codigo) 
  REFERENCES TB_Usuario (USU_Codigo)
- ALTER TABLE TB_Aluno ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY (END_Codigo) 
+ ALTER TABLE TB_Aluno ADD CONSTRAINT FK_END_CODIGO FOREIGN KEY (END_Codigo) 
  REFERENCES TB_Endereco (END_Codigo)
  
 -----------------------------------------------------
@@ -60,8 +61,8 @@ CREATE TABLE TB_Orientador (
   END_Codigo INT NOT NULL)
 
  ALTER TABLE TB_Orientador ADD CONSTRAINT PK_ORIENTADOR_CODIGO PRIMARY KEY (ORI_Codigo)
- ALTER TABLE TB_Orientador ADD CONSTRAINT FK_TB_USUARIO_ENDERECO FOREIGN KEY (USU_Codigo , END_Codigo) 
- REFERENCES TB_Usuario (USU_Codigo , END_Codigo)
+ ALTER TABLE TB_Orientador ADD CONSTRAINT FK_TB_USUARIO FOREIGN KEY (USU_Codigo) 
+ REFERENCES TB_Usuario (USU_Codigo)
 -----------------------------------------------------
 --             TABELA MEDIDAS
 -----------------------------------------------------
@@ -103,7 +104,7 @@ CREATE TABLE TB_Anamnse (
   ANA_Pergunta VARCHAR(255) NULL,
   TB_Anamnsecol VARCHAR(45) NULL)
 
-  ALTER TABLE TB_Anamnese ADD CONSTRAINT PK_ANAMNESE_CODIGO PRIMARY KEY (ANA_Codigo)
+  ALTER TABLE TB_Anamnse ADD CONSTRAINT PK_ANAMNESE_CODIGO PRIMARY KEY (ANA_Codigo)
 -----------------------------------------------------
 --             TABELA RESPOSTA ANAMNESE
 -----------------------------------------------------
@@ -113,9 +114,9 @@ CREATE TABLE TB_RespostaAnmnese (
   TB_Anamnse_ANA_Codigo INT NOT NULL,
   RES_Anamnese VARCHAR(225) NULL)
   
-  ALTER TABLE TB_RespostaAnamnese ADD CONSTRAINT PK_RESPOSTA_ANAMNESE_CODIGO PRIMARY KEY (RES_Codigo)
-  ALTER TABLE TB_RespostaAnamnese ADD CONSTRAINT FK_TB_ALUNO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
-  ALTER TABLE TB_RespostaAnamnese ADD CONSTRAINT FK_TB_ANAMNESE FOREIGN KEY (ANA_Codigo) REFERENCES TB_Anamnese (ANA_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT PK_RESPOSTA_ANAMNESE_CODIGO PRIMARY KEY (RES_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ALUNO_RE FOREIGN KEY (TB_Aluno_ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ANAMNESE_RE FOREIGN KEY (TB_Anamnse_ANA_Codigo) REFERENCES TB_Anamnse (ANA_Codigo)
 -----------------------------------------------------
 --             TABELA TREINO
 -----------------------------------------------------
@@ -169,8 +170,8 @@ CREATE TABLE TB_Administrador (
   PRIMARY KEY (ADM_Codigo),
   INDEX fk_TB_Administrador_TB_Usuario1_idx (TB_Usuario_USU_Codigo ASC, TB_Usuario_TB_Endereco_END_Codigo ASC),
   CONSTRAINT fk_TB_Administrador_TB_Usuario1
-    FOREIGN KEY (TB_Usuario_USU_Codigo , TB_Usuario_TB_Endereco_END_Codigo)
-    REFERENCES TB_Usuario (USU_Codigo , TB_Endereco_END_Codigo)
+    FOREIGN KEY (TB_Usuario_USU_Codigo)
+    REFERENCES TB_Usuario (USU_Codigo)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 -----------------------------------------------------
@@ -238,10 +239,10 @@ CREATE TABLE TB_Mensalidade (
 --             TABELA TURNO
 -----------------------------------------------------
 CREATE TABLE TB_Turno (
-  ALU_Codigo INT NOT NULL,
-  ALU_Turno VARCHAR(45) NULL)
+  TUR_Codigo INT NOT NULL,
+  TUR_Turno VARCHAR(45) NULL)
 
-  ALTER TABLE TB_Turno ADD CONSTRAINT PK_TURNO_CODIGO PRIMARY KEY (TURNO_Codigo)
+  ALTER TABLE TB_Turno ADD CONSTRAINT PK_TURNO_CODIGO PRIMARY KEY (TUR_Codigo)
 -----------------------------------------------------
 --             TABELA FLUXO
 -----------------------------------------------------
@@ -261,6 +262,6 @@ CREATE TABLE TB_Fluxo (
     ON UPDATE NO ACTION,
   CONSTRAINT fk_TB_Fluxo_TB_Turno1
     FOREIGN KEY (TB_Turno_ALU_Codigo)
-    REFERENCES TB_Turno (ALU_Codigo)
+    REFERENCES TB_Turno (TUR_Codigo)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

@@ -1,5 +1,5 @@
-create database PROJETOSAD
-use PROJETOSAD
+CREATE DATABASE ProjetoSad
+USE ProjetoSad
 -----------------------------------------------------
 --             TABELA ENDEREÇO
 -----------------------------------------------------
@@ -41,15 +41,12 @@ CREATE TABLE TB_Aluno (
   ALU_DataEntrada DATE NULL,
   ALU_Objetivo VARCHAR(45) NULL,
   ALU_Status VARCHAR(10) NOT NULL,
-  USU_Codigo INT NOT NULL,
-  END_Codigo INT NOT NULL)
+  USU_Codigo INT NOT NULL)
  
- ALTER TABLE TB_Aluno add CONSTRAINT PK_ALUNO_CODIGO primary key (ALU_CODIGO)
+ ALTER TABLE TB_Aluno add CONSTRAINT PK_ALUNO_CODIGO PRIMARY KEY (ALU_CODIGO)
  ALTER TABLE TB_Aluno ADD CONSTRAINT FK_USU_CODIGO FOREIGN KEY (USU_Codigo) 
  REFERENCES TB_Usuario (USU_Codigo)
- ALTER TABLE TB_Aluno ADD CONSTRAINT FK_END_CODIGO FOREIGN KEY (END_Codigo) 
- REFERENCES TB_Endereco (END_Codigo)
- 
+
 -----------------------------------------------------
 --             TABELA ORIENTADOR
 -----------------------------------------------------
@@ -57,8 +54,8 @@ CREATE TABLE TB_Orientador (
   ORI_Codigo INT NOT NULL,
   ORI_Cref VARCHAR(15) NULL,
   ORI_Especialidade VARCHAR(45) NULL,
-  USU_Codigo INT NOT NULL,
-  END_Codigo INT NOT NULL)
+  USU_Codigo INT NOT NULL)
+  
 
  ALTER TABLE TB_Orientador ADD CONSTRAINT PK_ORIENTADOR_CODIGO PRIMARY KEY (ORI_Codigo)
  ALTER TABLE TB_Orientador ADD CONSTRAINT FK_TB_USUARIO FOREIGN KEY (USU_Codigo) 
@@ -101,8 +98,7 @@ CREATE TABLE TB_Exercicio (
 -----------------------------------------------------
 CREATE TABLE TB_Anamnse (
   ANA_Codigo INT NOT NULL,
-  ANA_Pergunta VARCHAR(255) NULL,
-  TB_Anamnsecol VARCHAR(45) NULL)
+  ANA_Pergunta VARCHAR(255) NULL)
 
   ALTER TABLE TB_Anamnse ADD CONSTRAINT PK_ANAMNESE_CODIGO PRIMARY KEY (ANA_Codigo)
 -----------------------------------------------------
@@ -110,70 +106,48 @@ CREATE TABLE TB_Anamnse (
 -----------------------------------------------------
 CREATE TABLE TB_RespostaAnmnese (
   RES_Codigo INT NOT NULL,
-  TB_Aluno_ALU_Codigo INT NOT NULL,
-  TB_Anamnse_ANA_Codigo INT NOT NULL,
+  ALU_Codigo INT NOT NULL,
+  ANA_Codigo INT NOT NULL,
   RES_Anamnese VARCHAR(225) NULL)
   
-  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT PK_RESPOSTA_ANAMNESE_CODIGO PRIMARY KEY (RES_Codigo)
-  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ALUNO_RE FOREIGN KEY (TB_Aluno_ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
-  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ANAMNESE_RE FOREIGN KEY (TB_Anamnse_ANA_Codigo) REFERENCES TB_Anamnse (ANA_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT PK_RESPOSTA_ANAMNESE_CODIGO PRIMARY KEY (RES_Codigo,ALU_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ALUNO_RE FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
+  ALTER TABLE TB_RespostaAnmnese ADD CONSTRAINT FK_TB_ANAMNESE_RE FOREIGN KEY (ANA_Codigo) REFERENCES TB_Anamnse (ANA_Codigo)
 -----------------------------------------------------
 --             TABELA TREINO
 -----------------------------------------------------
 CREATE TABLE TB_Treino (
   TRE_Codigo INT NOT NULL,
-  TB_Orientador_ORI_Codigo INT NOT NULL,
+  ORI_Codigo INT NOT NULL,
   TRE_Dia VARCHAR(45) NULL,
-  TB_Aluno_ALU_Codigo INT NOT NULL,
-  PRIMARY KEY (TRE_Codigo, TB_Aluno_ALU_Codigo),
-  INDEX fk_TB_Treino_TB_Orientador1_idx (TB_Orientador_ORI_Codigo ASC),
-  INDEX fk_TB_Treino_TB_Aluno1_idx (TB_Aluno_ALU_Codigo ASC),
-  CONSTRAINT fk_TB_Treino_TB_Orientador1
-    FOREIGN KEY (TB_Orientador_ORI_Codigo)
-    REFERENCES TB_Orientador (ORI_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_Treino_TB_Aluno1
-    FOREIGN KEY (TB_Aluno_ALU_Codigo)
-    REFERENCES TB_Aluno (ALU_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  ALU_Codigo INT NOT NULL)
+
+  ALTER TABLE TB_Treino ADD CONSTRAINT PK_TB_TREINO PRIMARY KEY (TRE_Codigo, ALU_Codigo)
+  ALTER TABLE TB_Treino ADD CONSTRAINT FK_TB_TREINO_ALUNO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
+  ALTER TABLE TB_Treino ADD CONSTRAINT FK_TB_TREINO_ORIENTADOR FOREIGN KEY (ORI_Codigo) REFERENCES TB_Orientador (ORI_Codigo)
 -----------------------------------------------------
 --             TABELA EXERCICIO POR TREINO
 -----------------------------------------------------
 CREATE TABLE TB_ExercicioPorTreino (
-  TB_Exercicio_EXE_Codigo INT NOT NULL,
-  TB_Treino_TRE_Codigo INT NOT NULL,
-  TB_Treino_TB_Aluno_ALU_Codigo INT NOT NULL,
+  EXE_Codigo INT NOT NULL,
+  TRE_Codigo INT NOT NULL,
+  ALU_Codigo INT NOT NULL,
   EXT_Repeticao INT NULL,
   EXT_Serie INT NULL,
-  EXT_Carga INT NULL,
-  PRIMARY KEY (TB_Exercicio_EXE_Codigo, TB_Treino_TRE_Codigo, TB_Treino_TB_Aluno_ALU_Codigo),
-  INDEX fk_TB_ExercicioPorTreino_TB_Treino1_idx (TB_Treino_TRE_Codigo ASC, TB_Treino_TB_Aluno_ALU_Codigo ASC),
-  CONSTRAINT fk_TB_ExercicioPorTreino_TB_Exercicio1
-    FOREIGN KEY (TB_Exercicio_EXE_Codigo)
-    REFERENCES TB_Exercicio (EXE_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_ExercicioPorTreino_TB_Treino1
-    FOREIGN KEY (TB_Treino_TRE_Codigo , TB_Treino_TB_Aluno_ALU_Codigo)
-    REFERENCES TB_Treino (TRE_Codigo , TB_Aluno_ALU_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  EXT_Carga INT NULL)
+   ALTER TABLE TB_ExercicioPorTreino ADD CONSTRAINT PK_TB_EXETREINO PRIMARY KEY (EXE_Codigo, TRE_Codigo, ALU_Codigo)
+   ALTER TABLE TB_ExercicioPorTreino ADD CONSTRAINT FK_EXERCICIO_CODIGO FOREIGN KEY (EXE_Codigo) REFERENCES TB_Exercicio (EXE_Codigo)
+   ALTER TABLE TB_ExercicioPorTreino ADD CONSTRAINT FK_ALUNO_COD_TREINO FOREIGN KEY (TRE_Codigo , ALU_Codigo)REFERENCES TB_Treino (TRE_Codigo, ALU_Codigo)
+    
 -----------------------------------------------------
 --             TABELA ADMINISTRADOR
 -----------------------------------------------------
 CREATE TABLE TB_Administrador (
   ADM_Codigo INT NOT NULL,
-  TB_Usuario_USU_Codigo INT NOT NULL,
-  TB_Usuario_TB_Endereco_END_Codigo INT NOT NULL,
-  PRIMARY KEY (ADM_Codigo),
-  INDEX fk_TB_Administrador_TB_Usuario1_idx (TB_Usuario_USU_Codigo ASC, TB_Usuario_TB_Endereco_END_Codigo ASC),
-  CONSTRAINT fk_TB_Administrador_TB_Usuario1
-    FOREIGN KEY (TB_Usuario_USU_Codigo)
-    REFERENCES TB_Usuario (USU_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  USU_Codigo INT NOT NULL)
+  ALTER TABLE TB_Administrador ADD CONSTRAINT PK_TB_ADM  PRIMARY KEY (ADM_Codigo)
+  ALTER TABLE TB_Administrador ADD CONSTRAINT FK_USU_COD FOREIGN KEY (USU_Codigo) REFERENCES TB_Usuario (USU_Codigo)
+  
 -----------------------------------------------------
 --             TABELA PACOTE
 -----------------------------------------------------
@@ -189,15 +163,12 @@ CREATE TABLE TB_Pacote (
 CREATE TABLE TB_Academia (
   ACA_Codigo INT NOT NULL,
   ACA_RazaoSocial VARCHAR(45) NULL,
-  TB_Endereco_END_Codigo INT NOT NULL,
-  ACA_Cnpj VARCHAR(30) NULL,
-  PRIMARY KEY (ACA_Codigo, TB_Endereco_END_Codigo),
-  INDEX fk_TB_Academia_TB_Endereco1_idx (TB_Endereco_END_Codigo ASC),
-  CONSTRAINT fk_TB_Academia_TB_Endereco1
-    FOREIGN KEY (TB_Endereco_END_Codigo)
-    REFERENCES TB_Endereco (END_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  END_Codigo INT NOT NULL,
+  ACA_Cnpj VARCHAR(30) NULL)
+
+  ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
+  ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
+  
 -----------------------------------------------------
 --             TABELA MENSALIDADE
 -----------------------------------------------------
@@ -205,36 +176,17 @@ CREATE TABLE TB_Mensalidade (
   MEN_Codigo INT NOT NULL,
   MEN_DataPagamento DATE NULL,
   MEN_PagamentoMes DATE NULL,
-  TB_Administrador_ADM_Codigo INT NOT NULL,
-  TB_Aluno_ALU_Codigo INT NOT NULL,
-  TB_Pacote_PAC_Codigo INT NOT NULL,
-  TB_Academia_ACA_Codigo INT NOT NULL,
-  TB_Academia_TB_Endereco_END_Codigo INT NOT NULL,
-  PRIMARY KEY (MEN_Codigo, TB_Aluno_ALU_Codigo, TB_Academia_ACA_Codigo, TB_Academia_TB_Endereco_END_Codigo),
-  INDEX fk_TB_Mensalidade_TB_Administrador1_idx (TB_Administrador_ADM_Codigo ASC),
-  INDEX fk_TB_Mensalidade_TB_Aluno1_idx (TB_Aluno_ALU_Codigo ASC),
-  INDEX fk_TB_Mensalidade_TB_Pacote1_idx (TB_Pacote_PAC_Codigo ASC),
-  INDEX fk_TB_Mensalidade_TB_Academia1_idx (TB_Academia_ACA_Codigo ASC, TB_Academia_TB_Endereco_END_Codigo ASC),
-  CONSTRAINT fk_TB_Mensalidade_TB_Administrador1
-    FOREIGN KEY (TB_Administrador_ADM_Codigo)
-    REFERENCES TB_Administrador (ADM_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_Mensalidade_TB_Aluno1
-    FOREIGN KEY (TB_Aluno_ALU_Codigo)
-    REFERENCES TB_Aluno (ALU_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_Mensalidade_TB_Pacote1
-    FOREIGN KEY (TB_Pacote_PAC_Codigo)
-    REFERENCES TB_Pacote (PAC_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_Mensalidade_TB_Academia1
-    FOREIGN KEY (TB_Academia_ACA_Codigo , TB_Academia_TB_Endereco_END_Codigo)
-    REFERENCES TB_Academia (ACA_Codigo , TB_Endereco_END_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  ADM_Codigo INT NOT NULL,
+  ALU_Codigo INT NOT NULL,
+  PAC_Codigo INT NOT NULL,
+  ACA_Codigo INT NOT NULL)
+
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT PK_TB_MENSALIDADE PRIMARY KEY (MEN_Codigo, ALU_Codigo, ACA_Codigo)
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ADM_CODIGO FOREIGN KEY (ADM_Codigo) REFERENCES TB_Administrador (ADM_Codigo)
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ALU_CODIGO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_PAC_CODIGO FOREIGN KEY (PAC_Codigo) REFERENCES TB_Pacote (PAC_Codigo)
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ACA_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_Academia (ACA_Codigo)
+  
 -----------------------------------------------------
 --             TABELA TURNO
 -----------------------------------------------------
@@ -247,21 +199,12 @@ CREATE TABLE TB_Turno (
 --             TABELA FLUXO
 -----------------------------------------------------
 CREATE TABLE TB_Fluxo (
-  TUR_Codigo INT NOT NULL,
-  TUR_DataEntrada DATETIME NOT NULL,
-  ALU_DataSaida DATETIME NULL,
-  TB_Aluno_ALU_Codigo INT NOT NULL,
-  TB_Turno_ALU_Codigo INT NOT NULL,
-  PRIMARY KEY (TUR_Codigo),
-  INDEX fk_TB_Turno_TB_Aluno1_idx (TB_Aluno_ALU_Codigo ASC),
-  INDEX fk_TB_Fluxo_TB_Turno1_idx (TB_Turno_ALU_Codigo ASC),
-  CONSTRAINT fk_TB_Turno_TB_Aluno1
-    FOREIGN KEY (TB_Aluno_ALU_Codigo)
-    REFERENCES TB_Aluno (ALU_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_TB_Fluxo_TB_Turno1
-    FOREIGN KEY (TB_Turno_ALU_Codigo)
-    REFERENCES TB_Turno (TUR_Codigo)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  FLU_Codigo INT NOT NULL,
+  FLU_DataEntrada DATETIME NOT NULL,
+  FLU_DataSaida DATETIME NULL,
+  ALU_Codigo INT NOT NULL,
+  TUR_Codigo INT NOT NULL)
+
+  ALTER TABLE TB_Fluxo ADD CONSTRAINT PK_TB_FLUXO PRIMARY KEY (FLU_Codigo)
+  ALTER TABLE TB_Fluxo ADD CONSTRAINT FK_ALUNO_CODIGO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
+  ALTER TABLE TB_Fluxo ADD CONSTRAINT FK_TUR_CODIGO FOREIGN KEY (TUR_Codigo) REFERENCES TB_Turno (TUR_Codigo)

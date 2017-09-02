@@ -1,5 +1,22 @@
 CREATE DATABASE ProjetoSad
 USE ProjetoSad
+
+DROP TABLE TB_Endereco
+DROP TABLE TB_Usuario
+DROP TABLE TB_Academia
+DROP TABLE TB_Administrador
+DROP TABLE TB_Aluno
+DROP TABLE TB_Anamnse
+DROP TABLE TB_Exercicio
+DROP TABLE TB_ExercicioPorTreino
+DROP TABLE TB_Fluxo
+DROP TABLE TB_Medidas
+DROP TABLE TB_Mensalidade
+DROP TABLE TB_Orientador
+DROP TABLE TB_Pacote
+DROP TABLE TB_RespostaAnmnese
+DROP TABLE TB_Treino
+DROP TABLE TB_Turno
 -----------------------------------------------------
 --             TABELA ENDEREÇO
 -----------------------------------------------------

@@ -1,22 +1,5 @@
 CREATE DATABASE ProjetoSad
 USE ProjetoSad
-
-DROP TABLE TB_Endereco
-DROP TABLE TB_Usuario
-DROP TABLE TB_Academia
-DROP TABLE TB_Administrador
-DROP TABLE TB_Aluno
-DROP TABLE TB_Anamnse
-DROP TABLE TB_Exercicio
-DROP TABLE TB_ExercicioPorTreino
-DROP TABLE TB_Fluxo
-DROP TABLE TB_Medidas
-DROP TABLE TB_Mensalidade
-DROP TABLE TB_Orientador
-DROP TABLE TB_Pacote
-DROP TABLE TB_RespostaAnmnese
-DROP TABLE TB_Treino
-DROP TABLE TB_Turno
 -----------------------------------------------------
 --             TABELA ENDEREÇO
 -----------------------------------------------------
@@ -35,16 +18,16 @@ ALTER TABLE TB_Endereco ADD CONSTRAINT PK_ENDERECO_CODIGO PRIMARY KEY (END_Codig
 --             TABELA USUARIO
 -----------------------------------------------------
 CREATE TABLE TB_Usuario (
-  USU_Codigo INT NOT NULL,
+  USU_Codigo INT NOT NULL IDENTITY,
   USU_Nome VARCHAR(45) NULL,
   USU_Email VARCHAR(45) NULL,
   USU_Senha VARCHAR(10) NULL,
   USU_DataNascimento DATE NULL,
   USU_Telefone VARCHAR(15) NULL,
-  USU_Cpf VARCHAR(13) NULL,
+  USU_Cpf VARCHAR(14) NULL,
   USU_Rg VARCHAR(15) NULL,
   USU_Foto VARBINARY(MAX) NULL,
-  USU_Digital VARBINARY(MAX) NOT NULL,
+  USU_Digital VARBINARY(MAX) NULL,
   END_Codigo INT NOT NULL)
 
 ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo)
@@ -53,8 +36,9 @@ ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_
 -----------------------------------------------------
 --             TABELA ALUNO
 -----------------------------------------------------
+/* Coloquei identity na chave primaria */
 CREATE TABLE TB_Aluno (
-  ALU_Codigo INT NOT NULL,
+  ALU_Codigo INT NOT NULL IDENTITY(1,1),
   ALU_DataEntrada DATE NULL,
   ALU_Objetivo VARCHAR(45) NULL,
   ALU_Status VARCHAR(10) NOT NULL,
@@ -216,7 +200,7 @@ CREATE TABLE TB_Turno (
 --             TABELA FLUXO
 -----------------------------------------------------
 CREATE TABLE TB_Fluxo (
-  FLU_Codigo INT NOT NULL,
+  FLU_Codigo INT NOT NULL IDENTITY(1,1),
   FLU_DataEntrada DATETIME NOT NULL,
   FLU_DataSaida DATETIME NULL,
   ALU_Codigo INT NOT NULL,

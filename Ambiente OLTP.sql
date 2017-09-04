@@ -18,7 +18,7 @@ ALTER TABLE TB_Endereco ADD CONSTRAINT PK_ENDERECO_CODIGO PRIMARY KEY (END_Codig
 --             TABELA USUARIO
 -----------------------------------------------------
 CREATE TABLE TB_Usuario (
-  USU_Codigo INT NOT NULL IDENTITY,
+  USU_Codigo INT NOT NULL IDENTITY(1,1),
   USU_Nome VARCHAR(45) NULL,
   USU_Email VARCHAR(45) NULL,
   USU_Senha VARCHAR(10) NULL,

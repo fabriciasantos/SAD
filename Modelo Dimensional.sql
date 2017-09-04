@@ -8,7 +8,6 @@ DROP TABLE DIM_Horario
 DROP TABLE DIM_Turno
 DROP TABLE FATO_Fluxo
 
-USE ProjetoSad
 -----------------------------------------------------
 --             DIMENSÃO TEMPO
 -----------------------------------------------------

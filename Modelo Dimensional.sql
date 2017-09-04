@@ -7,6 +7,8 @@ DROP TABLE DIM_Localizacao
 DROP TABLE DIM_Horario
 DROP TABLE DIM_Turno
 DROP TABLE FATO_Fluxo
+
+USE ProjetoSad
 -----------------------------------------------------
 --             DIMENSÃO TEMPO
 -----------------------------------------------------
@@ -98,8 +100,8 @@ CREATE TABLE FATO_Fluxo (
   id_FATO_Fluxo INT NOT NULL,
   Cod_Fluxo INT NOT NULL,
   Cod_Data INT NOT NULL,
-  Cod_HorarioEntrada DATETIME NOT NULL,
-  Cod_HorarioSaida DATETIME NOT NULL,
+  Cod_HorarioEntrada INT NOT NULL,
+  Cod_HorarioSaida INT NOT NULL,
   Cod_Aluno INT NOT NULL,
   Cod_Pacote INT NOT NULL,
   Cod_Empresa INT NOT NULL,
@@ -115,5 +117,7 @@ CREATE TABLE FATO_Fluxo (
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_EMPRESA FOREIGN KEY (Cod_Empresa) REFERENCES DIM_Empresa (Id_Empresa)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_FAIXAETARIA FOREIGN KEY (Cod_FaixaEtaria) REFERENCES DIM_FaixaEtaria (Id_FaixaEtaria)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_LOCALIZACAO FOREIGN KEY (Cod_Localizacao) REFERENCES DIM_Localizacao (Id_Localizacao)
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO1 FOREIGN KEY (Cod_HorarioEntrada, Cod_HorarioSaida) REFERENCES DIM_Horario (Cod_Horario)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO1 FOREIGN KEY (Cod_HorarioEntrada) REFERENCES DIM_Horario (Cod_Horario)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO2 FOREIGN KEY (Cod_HorarioSaida) REFERENCES DIM_Horario (Cod_Horario)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TURNO FOREIGN KEY (Cod_Turno) REFERENCES DIM_Turno (Id_Turno)   
+  

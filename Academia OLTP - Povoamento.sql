@@ -309,3 +309,5 @@ END
 
 
 EXEC SP_POVOAMENTO_TBFLUXO '02-09-2017','05-09-2017' 
+
+select * from TB_Fluxo

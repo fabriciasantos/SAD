@@ -12,19 +12,19 @@ DROP TABLE FATO_Fluxo
 --             DIMENSÃO TEMPO
 -----------------------------------------------------
 CREATE TABLE DIM_Tempo (
-  Cod_Tempo INT NOT NULL,
+  ID_Tempo INT NOT NULL identity(1,1),
   Data DATE NULL,
   Ano DATE NULL,
   Mes DATE NULL,
   Dia DATE NULL,
   Semestre VARCHAR(15) NULL)
 
-  ALTER TABLE DIM_Tempo ADD CONSTRAINT PK_DIM_TEMPO PRIMARY KEY (Cod_Tempo)
+  ALTER TABLE DIM_Tempo ADD CONSTRAINT PK_DIM_TEMPO PRIMARY KEY (Id_Tempo)
 -----------------------------------------------------
 --             DIMENSÃO EMPRESA
 -----------------------------------------------------
  CREATE TABLE DIM_Empresa (
-  Id_Empresa INT NOT NULL,
+  Id_Empresa INT NOT NULL identity(1,1),
   Cod_Empresa INT NULL,
   NomeEmpresa VARCHAR(45) NULL)
 
@@ -34,7 +34,7 @@ CREATE TABLE DIM_Tempo (
 --             DIMENSÃO PACOTE
 -----------------------------------------------------
   CREATE TABLE DIM_Pacote (
-  Id_Pacote INT NOT NULL,
+  Id_Pacote INT NOT NULL identity(1,1),
   Cod_Pacote INT NULL,
   NomePacote VARCHAR(45) NULL,
   ValorPacote FLOAT NULL)
@@ -45,7 +45,7 @@ ALTER TABLE DIM_Pacote ADD CONSTRAINT PK_DIM_PACOTE PRIMARY KEY (Id_Pacote)
 --             DIMENSÃO ALUNO
 -----------------------------------------------------
 CREATE TABLE DIM_Aluno (
-  id_Aluno INT NOT NULL,
+  id_Aluno INT NOT NULL identity(1,1),
   Cod_Aluno INT NULL,
   NomeAluno VARCHAR(45) NULL)
   
@@ -55,7 +55,7 @@ CREATE TABLE DIM_Aluno (
 --             DIMENSÃO FAIXA ETARIA
 -----------------------------------------------------
 CREATE TABLE DIM_FaixaEtaria (
-  Id_FaixaEtaria INT NOT NULL,
+  Id_FaixaEtaria INT NOT NULL identity(1,1),
   Cod_FaixaEtaria INT NULL,
   FaixaEtaria VARCHAR(10) NULL)
 
@@ -64,7 +64,7 @@ CREATE TABLE DIM_FaixaEtaria (
 --             DIMENSÃO LOCALIZAÇÃO
 -----------------------------------------------------
 CREATE TABLE DIM_Localizacao (
-  Id_Localizacao INT NOT NULL,
+  Id_Localizacao INT NOT NULL identity(1,1),
   Cod_Localizacao INT NULL,
   Estado VARCHAR(2) NULL,
   Cidade VARCHAR(30) NULL,
@@ -76,17 +76,18 @@ CREATE TABLE DIM_Localizacao (
 --             DIMENSÃO HORARIO
 -----------------------------------------------------
 CREATE TABLE DIM_Horario (
+  Id_Horario int not null identity(1,1),
   Cod_Horario INT NOT NULL,
   Hora DATETIME NULL,
   Minuto DATETIME NULL)
 
-  ALTER TABLE DIM_Horario ADD CONSTRAINT PK_DIM_HORARIO PRIMARY KEY (Cod_Horario) 
+  ALTER TABLE DIM_Horario ADD CONSTRAINT PK_DIM_HORARIO PRIMARY KEY (Id_Horario) 
 
 -----------------------------------------------------
 --             DIMENSÃO TURNO
 -----------------------------------------------------
 CREATE TABLE DIM_Turno (
-  Id_Turno INT NOT NULL,
+  Id_Turno INT NOT NULL identity(1,1),
   Cod_Turno INT NULL,
   NomeTurno VARCHAR(45) NULL)
 
@@ -110,13 +111,13 @@ CREATE TABLE FATO_Fluxo (
   Quantidade INT NULL)
 
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT PK_FATO_FLUXO PRIMARY KEY (id_FATO_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Pacote, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno)
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TEMPO FOREIGN KEY (Cod_Data) REFERENCES DIM_Tempo (Cod_Tempo)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TEMPO FOREIGN KEY (Cod_Data) REFERENCES DIM_Tempo (id_Tempo)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_ALUNO FOREIGN KEY (Cod_Aluno) REFERENCES DIM_Aluno (id_Aluno)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_PACOTE FOREIGN KEY (Cod_Pacote) REFERENCES DIM_Pacote (Id_Pacote)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_EMPRESA FOREIGN KEY (Cod_Empresa) REFERENCES DIM_Empresa (Id_Empresa)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_FAIXAETARIA FOREIGN KEY (Cod_FaixaEtaria) REFERENCES DIM_FaixaEtaria (Id_FaixaEtaria)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_LOCALIZACAO FOREIGN KEY (Cod_Localizacao) REFERENCES DIM_Localizacao (Id_Localizacao)
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO1 FOREIGN KEY (Cod_HorarioEntrada) REFERENCES DIM_Horario (Cod_Horario)
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO2 FOREIGN KEY (Cod_HorarioSaida) REFERENCES DIM_Horario (Cod_Horario)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO1 FOREIGN KEY (Cod_HorarioEntrada) REFERENCES DIM_Horario (Id_Horario)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO2 FOREIGN KEY (Cod_HorarioSaida) REFERENCES DIM_Horario (Id_Horario)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TURNO FOREIGN KEY (Cod_Turno) REFERENCES DIM_Turno (Id_Turno)   
   

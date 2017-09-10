@@ -79,7 +79,8 @@ CREATE TABLE DIM_Horario (
   Id_Horario int not null identity(1,1),
   Cod_Horario INT NOT NULL,
   Hora DATETIME NULL,
-  Minuto DATETIME NULL)
+  Minuto DATETIME NULL,
+  Flag VARCHAR(15) NULL)
 
   ALTER TABLE DIM_Horario ADD CONSTRAINT PK_DIM_HORARIO PRIMARY KEY (Id_Horario) 
 

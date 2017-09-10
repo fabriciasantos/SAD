@@ -1,9 +1,5 @@
 CREATE DATABASE ProjetoSad
 USE ProjetoSad
-
-
-
-
 -----------------------------------------------------
 --             TABELA ENDEREÇO
 -----------------------------------------------------
@@ -40,7 +36,6 @@ ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_
 -----------------------------------------------------
 --             TABELA ALUNO
 -----------------------------------------------------
-/* Coloquei identity na chave primaria */
 CREATE TABLE TB_Aluno (
   ALU_Codigo INT NOT NULL IDENTITY(1,1),
   ALU_DataEntrada DATE NULL,
@@ -209,6 +204,7 @@ CREATE TABLE TB_Fluxo (
   FLU_DataSaida DATETIME NULL,
   ALU_Codigo INT NOT NULL,
   TUR_Codigo INT NOT NULL)
+  --PRECISA SER DEBATIDO ESSA TABELA, CREIO QUE TERA UM RELACIONAMENTO DE N:M
 
   ALTER TABLE TB_Fluxo ADD CONSTRAINT PK_TB_FLUXO PRIMARY KEY (FLU_Codigo)
   ALTER TABLE TB_Fluxo ADD CONSTRAINT FK_ALUNO_CODIGO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)

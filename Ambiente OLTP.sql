@@ -33,6 +33,7 @@ CREATE TABLE TB_Usuario (
 
 ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo)
 ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_Codigo) REFERENCES TB_Endereco(END_Codigo)
+ALTER TABLE TB_Usuario ADD CONSTRAINT CK_FAIXA CHECK (USU_FaixaEtaria in('Adulto', 'Jovem', 'Idoso'))
 
 -----------------------------------------------------
 --             TABELA ALUNO

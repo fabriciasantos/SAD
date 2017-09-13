@@ -155,65 +155,65 @@ INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email,
 
 		/* USUARIOS COM ENDERECOS VOLTADOS A ITABAIANA */
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Sofia Pereira','337310026','915.144.328-70','09/08/1962','sofia@dominio.com.br', 8)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Sofia Pereira','337310026','915.144.328-70','09/08/1962','sofia@dominio.com.br', 8, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Nicole Oliveira','337310026','249.907.002-10','07/02/1963','nicole@dominio.com.br', 8)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Nicole Oliveira','337310026','249.907.002-10','07/02/1963','nicole@dominio.com.br', 8, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Valentina Pilar','348280683','138.022.246-04','02/01/1997','valentina@dominio.com.br', 8)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Valentina Pilar','348280683','138.022.246-04','02/01/1997','valentina@dominio.com.br', 8, 'Jovem')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Emanuelly Dias','294854459','213.804.936-17','21/08/1994','emanuelly@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Emanuelly Dias','294854459','213.804.936-17','21/08/1994','emanuelly@dominio.com.br', 7 , 'Jovem')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Alicia Vasconcelos','429085072','099.954.599-06','25/09/1997','alicia@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Alicia Vasconcelos','429085072','099.954.599-06','25/09/1997','alicia@dominio.com.br', 7, 'Jovem')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Angelina Pinheiro','165980187','264.808.809-19','01/12/1971','angelina@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Angelina Pinheiro','165980187','264.808.809-19','01/12/1971','angelina@dominio.com.br', 7, 'Adulto')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Henrique Cavalcante','294854459','261.840.590-09','08/01/1954','henrique@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Henrique Cavalcante','294854459','261.840.590-09','08/01/1954','henrique@dominio.com.br', 7, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Cecilia Carvalho','110336793','502.445.477-42','02/12/1984','cecilia@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Cecilia Carvalho','110336793','502.445.477-42','02/12/1984','cecilia@dominio.com.br', 7, 'Adulto')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Anderson Moreira','389773645','068.932.793-53','08/03/1957','anderson@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Anderson Moreira','389773645','068.932.793-53','08/03/1957','anderson@dominio.com.br', 7, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Diogo Alencar','468238992','732.044.065-20','08/07/1951','diogo@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Diogo Alencar','468238992','732.044.065-20','08/07/1951','diogo@dominio.com.br', 7, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Ester Paiva','110336793','123.967.277-29','08/04/1990','ester@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Ester Paiva','110336793','123.967.277-29','08/04/1990','ester@dominio.com.br', 7, 'Jovem')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Murilo Maia','467466269','918.426.305-98','20/05/1976','murilo@dominio.com.br',6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Murilo Maia','467466269','918.426.305-98','20/05/1976','murilo@dominio.com.br',6, 'Adulto')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Heitor Rodrigues','165980187','624.187.888-30','09/08/1954','heitor@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Heitor Rodrigues','165980187','624.187.888-30','09/08/1954','heitor@dominio.com.br', 6, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Rebeca Duarte','110336793','256.267.736-65','04/07/1956','rebeca@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Rebeca Duarte','110336793','256.267.736-65','04/07/1956','rebeca@dominio.com.br', 6, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Marina Boaventura','467466269','178.451.132-39','04/04/1991','marina@dominio.com.br', 7)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Marina Boaventura','467466269','178.451.132-39','04/04/1991','marina@dominio.com.br', 7, 'Jovem')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Nicole Martins','338627017','764.396.190-55','08/10/1959','nicole@dominio.com.br', 8)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Nicole Martins','338627017','764.396.190-55','08/10/1959','nicole@dominio.com.br', 8, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Tomas Albuquerque','271117813','661.731.467-03','27/01/1975','tomas@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Tomas Albuquerque','271117813','661.731.467-03','27/01/1975','tomas@dominio.com.br', 6, 'Adulto')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Ariela Batista','337310026','399.362.841-19','07/12/1978','ariela@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Ariela Batista','337310026','399.362.841-19','07/12/1978','ariela@dominio.com.br', 6, 'Adulto')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Iris Oliveira','438133018','308.887.177-33','16/09/1952','iris@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Iris Oliveira','438133018','308.887.177-33','16/09/1952','iris@dominio.com.br', 6, 'Idoso')
 
-INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo)
-				VALUES('Fernanda Costa','389773645','348.519.612-60','05/10/1953','fernanda@dominio.com.br', 6)
+INSERT INTO TB_USUARIO(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
+				VALUES('Fernanda Costa','389773645','348.519.612-60','05/10/1953','fernanda@dominio.com.br', 6, 'Idoso')
 
 /* TABELA TURNO */
 INSERT INTO TB_TURNO VALUES (1, 'Manha')

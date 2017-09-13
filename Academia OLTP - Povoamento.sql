@@ -95,8 +95,7 @@ INSERT INTO TB_Usuario(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email,
 				VALUES('Leticia Lima','165980187','257.899.069-74','09/09/1957','leticia@dominio.com.br', 5, 'Idoso')
 
 
-	/* REGISTROS DE USUARIOS COM ENDERECOS DE ITABAIANA */
-
+/* REGISTROS DE USUARIOS COM ENDERECOS DE ITABAIANA */
 INSERT INTO TB_Usuario(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, USU_FaixaEtaria)
 				VALUES('Bernardo Medeiros','438133018','411.682.387-22','14/01/1970','bernardo@dominio.com.br', 6, 'Idoso')
 
@@ -328,7 +327,12 @@ BEGIN
 		DEALLOCATE C_CURSOR
 END
 
+/* 
+
+TESTE
 
 EXEC SP_POVOAMENTO_TBFLUXO '02-09-2017','05-09-2017' 
 
 select * from TB_Fluxo
+
+*/

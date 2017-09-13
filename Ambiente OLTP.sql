@@ -163,14 +163,13 @@ CREATE TABLE TB_Pacote (
 --             TABELA ACADEMIA
 -----------------------------------------------------
 CREATE TABLE TB_Academia (
-  ACA_Codigo INT NOT NULL,
+  ACA_Codigo INT NOT NULL IDENTITY(1,1),
   ACA_RazaoSocial VARCHAR(45) NULL,
   END_Codigo INT NOT NULL,
   ACA_Cnpj VARCHAR(30) NULL)
-
+  
   ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
   ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
-  
 -----------------------------------------------------
 --             TABELA MENSALIDADE
 -----------------------------------------------------

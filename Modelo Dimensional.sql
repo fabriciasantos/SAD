@@ -55,8 +55,7 @@ CREATE TABLE DIM_Aluno (
 --             DIMENSÃO FAIXA ETARIA
 -----------------------------------------------------
 CREATE TABLE DIM_FaixaEtaria (
-  Id_FaixaEtaria INT NOT NULL identity(1,1),
-  Cod_FaixaEtaria INT NULL,
+  Id_FaixaEtaria INT NOT NULL identity(1,1), 
   FaixaEtaria VARCHAR(10) NULL)
 
   ALTER TABLE DIM_FaixaEtaria ADD CONSTRAINT PK_DIM_FAIXAETARIA PRIMARY KEY (Id_FaixaEtaria) 

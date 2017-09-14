@@ -1,0 +1,21 @@
+CREATE TABLE DIM_Tempo(
+	Id_Tempo int IDENTITY(1,1) NOT NULL,
+	Nivel varchar(8) NOT NULL,
+	Data datetime NULL,
+	Dia smallint NULL,
+	DiaSemana varchar(25) NULL,
+	DiaUtil char(3) NULL check (DiaUtil in('SIM','NÃO')),
+	Feriado char(3) NULL check (Feriado in('SIM','NÃO')),
+	TipoFeriado varchar(50) NULL DEFAULT('NÃO É FERIADO'),
+	FimSemana char(3) NULL check (FimSemana in('SIM','NÃO')),
+	Quinzena smallint NULL,
+	Mes smallint NULL,
+	NomeMes varchar(20) NULL,
+	FimMes char(3) NULL check (FimMes in('SIM','NÃO')),
+	Trimestre smallint NULL,
+	NomeTrimestre varchar(20) NULL,
+	Semestre smallint NULL,
+	NomeSemestre varchar(20) NULL,
+	Ano smallint NOT NULL,
+	PRIMARY KEY (Id_Tempo)
+);

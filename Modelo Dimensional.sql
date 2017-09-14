@@ -11,14 +11,27 @@ DROP TABLE FATO_Fluxo
 -----------------------------------------------------
 --             DIMENSÃO TEMPO
 -----------------------------------------------------
-CREATE TABLE DIM_Tempo (
-  ID_Tempo INT NOT NULL identity(1,1),
-  Data DATE NULL,
-  Ano DATE NULL,
-  Mes DATE NULL,
-  Dia DATE NULL,
-  Semestre VARCHAR(15) NULL)
-
+CREATE TABLE DIM_Tempo(
+	Id_Tempo int IDENTITY(1,1) NOT NULL,
+	Nivel varchar(8) NOT NULL,
+	Data datetime NULL,
+	Dia smallint NULL,
+	DiaSemana varchar(25) NULL,
+	DiaUtil char(3) NULL check (DiaUtil in('SIM','NÃO')),
+	Feriado char(3) NULL check (Feriado in('SIM','NÃO')),
+	TipoFeriado varchar(50) NULL DEFAULT('NÃO É FERIADO'),
+	FimSemana char(3) NULL check (FimSemana in('SIM','NÃO')),
+	Quinzena smallint NULL,
+	Mes smallint NULL,
+	NomeMes varchar(20) NULL,
+	FimMes char(3) NULL check (FimMes in('SIM','NÃO')),
+	Trimestre smallint NULL,
+	NomeTrimestre varchar(20) NULL,
+	Semestre smallint NULL,
+	NomeSemestre varchar(20) NULL,
+	Ano smallint NOT NULL,
+	PRIMARY KEY (Id_Tempo)
+)
   ALTER TABLE DIM_Tempo ADD CONSTRAINT PK_DIM_TEMPO PRIMARY KEY (Id_Tempo)
 -----------------------------------------------------
 --             DIMENSÃO EMPRESA

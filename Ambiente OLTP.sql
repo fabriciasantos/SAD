@@ -28,10 +28,25 @@ CREATE TABLE TB_Usuario (
   USU_Rg VARCHAR(15) NULL,
   USU_Foto VARBINARY(MAX) NULL,
   USU_Digital VARBINARY(MAX) NULL,
-  END_Codigo INT NOT NULL)
+  END_Codigo INT NOT NULL,
+  ACA_Codigo INT NOT NULL)
 
 ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo)
 ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_Codigo) REFERENCES TB_Endereco(END_Codigo)
+ALTER TABLE TB_Usuario ADD CONSTRAINT FK_ACA_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_ACADEMIA (ACA_Codigo)
+
+
+-----------------------------------------------------
+--             TABELA ACADEMIA
+-----------------------------------------------------
+CREATE TABLE TB_Academia (
+  ACA_Codigo INT NOT NULL,
+  ACA_RazaoSocial VARCHAR(45) NULL,
+  END_Codigo INT NOT NULL,
+  ACA_Cnpj VARCHAR(30) NULL)
+  
+  ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
+  ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
 
 -----------------------------------------------------
 --             TABELA ALUNO
@@ -41,13 +56,11 @@ CREATE TABLE TB_Aluno (
   ALU_DataEntrada DATE NULL,
   ALU_Objetivo VARCHAR(45) NULL,
   ALU_Status VARCHAR(10) NOT NULL,
-  USU_Codigo INT NOT NULL,
-  ACA_Codigo INT NOT NULL);
+  USU_Codigo INT NOT NULL)
  
  ALTER TABLE TB_Aluno add CONSTRAINT PK_ALUNO_CODIGO PRIMARY KEY (ALU_CODIGO)
  ALTER TABLE TB_Aluno ADD CONSTRAINT FK_USU_CODIGO FOREIGN KEY (USU_Codigo) 
  REFERENCES TB_Usuario (USU_Codigo)
- ALTER TABLE TB_Aluno ADD CONSTRAINT FK_ACA_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_ACADEMIA (ACA_Codigo)
 
 -----------------------------------------------------
 --             TABELA ORIENTADOR
@@ -159,17 +172,7 @@ CREATE TABLE TB_Pacote (
   PAC_Valor FLOAT NULL)
 
   ALTER TABLE TB_Pacote ADD CONSTRAINT PK_PACOTE_CODIGO PRIMARY KEY (PAC_Codigo)
------------------------------------------------------
---             TABELA ACADEMIA
------------------------------------------------------
-CREATE TABLE TB_Academia (
-  ACA_Codigo INT NOT NULL IDENTITY(1,1),
-  ACA_RazaoSocial VARCHAR(45) NULL,
-  END_Codigo INT NOT NULL,
-  ACA_Cnpj VARCHAR(30) NULL)
-  
-  ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
-  ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
+
 -----------------------------------------------------
 --             TABELA MENSALIDADE
 -----------------------------------------------------
@@ -186,7 +189,7 @@ CREATE TABLE TB_Mensalidade (
   ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ADM_CODIGO FOREIGN KEY (ADM_Codigo) REFERENCES TB_Administrador (ADM_Codigo)
   ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ALU_CODIGO FOREIGN KEY (ALU_Codigo) REFERENCES TB_Aluno (ALU_Codigo)
   ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_PAC_CODIGO FOREIGN KEY (PAC_Codigo) REFERENCES TB_Pacote (PAC_Codigo)
-  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_ACA_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_Academia (ACA_Codigo)
+  ALTER TABLE TB_Mensalidade ADD CONSTRAINT FK_AC_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_Academia (ACA_Codigo)
   
 -----------------------------------------------------
 --             TABELA TURNO

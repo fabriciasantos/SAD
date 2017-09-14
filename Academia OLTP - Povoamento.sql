@@ -11,11 +11,6 @@ INSERT INTO TB_ENDERECO(END_Codigo,END_Estado,END_Cidade,END_Bairro,END_Rua,END_
 INSERT INTO TB_ENDERECO(END_Codigo,END_Estado,END_Cidade,END_Bairro,END_Rua,END_Numero,END_Cep)
 						VALUES (3,'Sergipe','Itabaiana','Centro','R. Manoel Antônio de Oliveira',635,'49500-000')
 
-/* INSERCAO DAS ACADEMIAS*/
-INSERT INTO TB_ACADEMIA(END_Codigo, ACA_RazaoSocial) VALUES (1,'Academia Corpo e Forma')
-INSERT INTO TB_ACADEMIA(END_Codigo, ACA_RazaoSocial) VALUES (2,'Academia Conexão Física')
-INSERT INTO TB_ACADEMIA(END_Codigo, ACA_RazaoSocial) VALUES (6,'Academia Vip Fitness')
-
 /* ESSES REGSITROS REFERENCIAM APENAS OS BAIRROS, PORQUE É O IMPORTANTE */
 INSERT INTO TB_ENDERECO(END_Codigo,END_Estado,END_Cidade,END_Bairro,END_Cep)
 						VALUES (4,'Sergipe','Aracaju','Luzia','49048-500')
@@ -32,7 +27,13 @@ INSERT INTO TB_ENDERECO(END_Codigo,END_Estado,END_Cidade,END_Bairro,END_Cep)
 INSERT INTO TB_ENDERECO(END_Codigo,END_Estado,END_Cidade,END_Bairro,END_Cep)
 						VALUES (8,'Sergipe','Itabaiana','Campo Grande','49600-490')
 
-	/* REGISTROS DE USUARIOS COM ENDERECOS DE ARACAJU */
+/* INSERCAO DAS ACADEMIAS*/
+INSERT INTO TB_ACADEMIA(ACA_Codigo,END_Codigo, ACA_RazaoSocial) VALUES (1,1,'Academia Corpo e Forma')
+INSERT INTO TB_ACADEMIA(ACA_Codigo,END_Codigo, ACA_RazaoSocial) VALUES (2,2,'Academia Conexão Física')
+INSERT INTO TB_ACADEMIA(ACA_Codigo,END_Codigo, ACA_RazaoSocial) VALUES (3,6,'Academia Vip Fitness')
+
+
+/* REGISTROS DE USUARIOS COM ENDERECOS DE ARACAJU */
 		
 INSERT INTO TB_Usuario(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, ACA_Codigo)
 				VALUES('Luis Barreto', '271117813','960.530.119-91','16/11/1958','luis@dominio.com.br', 4, 1)

@@ -1,5 +1,6 @@
 DROP TABLE DIM_Tempo
 DROP TABLE DIM_Empresa
+DROP TABLE DIM_Pacote
 DROP TABLE DIM_Aluno
 DROP TABLE DIM_FaixaEtaria
 DROP TABLE DIM_Localizacao
@@ -37,10 +38,7 @@ CREATE TABLE DIM_Tempo(
  CREATE TABLE DIM_Empresa (
   Id_Empresa INT NOT NULL IDENTITY(1,1),
   Cod_Empresa INT NULL,
-  NomeEmpresa VARCHAR(45) NULL,
-  DT_INICIO datetime null,
-  DT_FIM datetime null,
-  FLAG char(3) check (FLAG in('SIM','NÃO')))
+  NomeEmpresa VARCHAR(45) NULL)
 
   ALTER TABLE DIM_Empresa ADD CONSTRAINT PK_DIM_EMPRESA PRIMARY KEY (Id_Empresa) 
 
@@ -112,7 +110,7 @@ CREATE TABLE FATO_Fluxo (
   Cod_Turno INT NOT NULL,
   Quantidade INT NULL)
 
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT PK_FATO_FLUXO PRIMARY KEY (id_FATO_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT PK_FATO_FLUXO PRIMARY KEY (id_FATO_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Pacote, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TEMPO FOREIGN KEY (Cod_Data) REFERENCES DIM_Tempo (id_Tempo)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_ALUNO FOREIGN KEY (Cod_Aluno) REFERENCES DIM_Aluno (id_Aluno)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_EMPRESA FOREIGN KEY (Cod_Empresa) REFERENCES DIM_Empresa (Id_Empresa)

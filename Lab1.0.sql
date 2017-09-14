@@ -1,4 +1,4 @@
-alter procedure SP_Dim_Tempo(@dataInicio datetime, @dataFinal datetime) as
+create procedure SP_Dim_Tempo(@dataInicio datetime, @dataFinal datetime) as
 begin
 	set language Brazilian
 	declare @start datetime, @end datetime
@@ -78,6 +78,6 @@ begin
 		end
 	end	
 end
-exec SP_Dim_Tempo '20090101', '20090201'
+exec SP_Dim_Tempo '20160101', '20180101'
 truncate table DIM_TEMPO;
 select * from DIM_Tempo;

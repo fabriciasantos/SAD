@@ -42,7 +42,6 @@ FLU_HorarioEntrada DATETIME NULL,
 FLU_HorarioSaida DATETIME NULL,
 FLU_CodAluno INT NULL,
 FLU_CodEmpresa INT NULL,
-
 FLU_CodTurno INT NULL
 )
 

@@ -39,7 +39,7 @@ select * from DIM_Empresa
 */
 
 -- DIMENSÃO ALUNO TIPO 1
-ALTER PROCEDURE SP_DIM_ALUNO (@DATACARGA DATETIME) AS
+CREATE PROCEDURE SP_DIM_ALUNO (@DATACARGA DATETIME) AS
 BEGIN
 	DECLARE @NOME VARCHAR(60), @NOMEA VARCHAR(60), @CODIGO INT
 
@@ -72,9 +72,11 @@ END
 update TB_AUX_ALUNO set ALU_Nome = 'Ana Freitas Santos' where ALU_Codigo = 1
 select * from TB_AUX_ALUNO
 EXEC SP_DIM_ALUNO '20170102'
-select * from DIM_Aluno
+select * from DIM_Aluno */
+
+
 /*  PROCEDIMENTO PARA A DIMENSAO TURNO */
-ALTER PROCEDURE SP_DIM_TURNO(@DataCarga DATETIME)
+CREATE PROCEDURE SP_DIM_TURNO(@DataCarga DATETIME)
 AS
 BEGIN
 	
@@ -118,28 +120,70 @@ SELECT * FROM dim_turno
 CREATE PROCEDURE SP_DIM_LOCALIZACAO (@DATA DATETIME) AS
 BEGIN
 	DECLARE @LOC_Codigo INT,@LOC_Estado VARCHAR(45),@LOC_Cidade VARCHAR(45),@Loc_Bairro VARCHAR(45)
-	DECLARE CR_INSERT_DIMLOCALIZACAO CURSOR FOR 
-	SELECT LOC_Codigo, LOC_Estado, LOC_Cidade, Loc_Bairro FROM TB_AUX_LOCALIZACAO WHERE @DATA = DATA_CARGA
-	OPEN CR_INSERT_DIMLOCALIZACAO
-	FETCH CR_INSET_DIMLOCALIZACAO INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
+		
+	DECLARE C_Cursor CURSOR FOR 
+						SELECT LOC_Codigo, LOC_Estado, LOC_Cidade, Loc_Bairro FROM TB_AUX_LOCALIZACAO WHERE @DATA = DATA_CARGA
+	OPEN C_Cursor
+	FETCH C_Cursor INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
+	
 	WHILE(@@FETCH_STATUS = 0)
 	BEGIN
-		IF(EXISTS(SELECT LOC_Codigo FROM DIM_LOCALIZACAO WHERE @LOC_Codigo = Cod_Localizacao))
-			UPDATE DIM_LOCALIZAÇÃO SET LOC_Estado = @LOC_Estado, LOC_Cidade = @LOC_Cidade, LOC_Bairro = @Loc_Bairro WHERE LOC_Codigo = @LOC_Codigo	 
+		IF(EXISTS(SELECT Cod_Localizacao FROM DIM_LOCALIZACAO WHERE @LOC_Codigo = Cod_Localizacao))
+			UPDATE DIM_LOCALIZACAO SET Cod_Localizacao = @LOC_Codigo, Cidade = @LOC_Cidade, Bairro = @Loc_Bairro, Estado = @LOC_Estado WHERE Cod_Localizacao = @LOC_Codigo	 
 		ELSE
-			INSERT INTO DIM_LOCALIZACAO(LOC_Codigo, LOC_Estado, LOC_Cidade, LOC_Bairro) VALUES(@LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro)
-		FETCH CR_INSET_DIMLOCALIZACAO INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
+			INSERT INTO DIM_LOCALIZACAO(Cod_Localizacao, Estado, Cidade, Bairro) VALUES(@LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro)
+
+	FETCH C_Cursor INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
 	END
-	CLOSE CR_INSET_DIMLOCALIZACAO
-	DEALLOCATE CR_INSET_DIMLOCALIZACAO
+
+	CLOSE C_Cursor
+	DEALLOCATE C_Cursor
 END
+
+/* 
+	select * from tb_aux_localizacao
+	EXEC SP_DIM_LOCALIZACAO '20170102'
+	select * from dim_localizacao
+*/
+
 
 /*INSERT PARA A DIMENSÃO FAIXA ETARIA*/
 INSERT INTO DIM_FAIXAETARIA VALUES('Jovem')
 INSERT INTO DIM_FAIXAETARIA VALUES('Adulto')
 INSERT INTO DIM_FAIXAETARIA VALUES('Idoso')
-*/
-CREATE PROCEDURE DIM_Fluxo(@DataCarga DATETIME)
+
+/* CARGA PARA A DIM HORARIO*/
+CREATE PROCEDURE SP_DIM_HORARIO (@DATACARGA DATETIME) AS
+BEGIN
+	DECLARE @cod_hora INT, @hora INT, @minuto INT, @flag varchar(10)
+
+	DECLARE C_Cursor CURSOR FOR 
+				SELECT h.HOR_Codigo, h.HOR_Hora, h.HOR_Minuto, h.HOR_Flag FROM TB_AUX_HORARIO h WHERE h.DATA_CARGA = @DATACARGA
+
+	OPEN C_Cursor
+	FETCH C_Cursor INTO @cod_hora, @hora, @minuto, @flag
+	WHILE(@@FETCH_STATUS = 0)
+	BEGIN
+		IF(EXISTS(SELECT h.Cod_Horario FROM DIM_HORARIO h WHERE h.Cod_Horario = @cod_hora AND h.Flag = @flag))
+		BEGIN
+				UPDATE DIM_Horario SET Cod_Horario = @cod_hora, Hora = @hora, Minuto = @minuto, Flag = @flag  WHERE Cod_Horario = @cod_hora
+		END
+		ELSE
+		BEGIN
+			INSERT INTO DIM_Horario(Cod_Horario, Hora, Minuto, Flag) VALUES(@cod_hora, @hora, @minuto, @flag)
+		END
+		FETCH C_Cursor INTO @cod_hora, @hora, @minuto, @flag
+	END
+	CLOSE C_Cursor
+	DEALLOCATE C_Cursor
+END
+
+select * from TB_AUX_HORARIO
+exec SP_DIM_HORARIO '20170102'
+select * from DIM_Horario
+
+/* PROCEDIMENTO DO FATO */
+CREATE PROCEDURE SP_FATO_Fluxo(@DataCarga DATETIME)
 AS
 BEGIN
 	DECLARE C_Cursor CURSOR FOR
@@ -154,46 +198,28 @@ BEGIN
 	
 	WHILE (@@FETCH_STATUS = 0)
 		BEGIN
-		DECLARE @id_fato_fluxo INT, @cod_fluxo_fato INT, @cod_data_fato INT, @cod_horarioEntrada_fato INT, @cod_horarioSaida_fato INT,
+		DECLARE @id_fato_fluxo INT, @cod_data_fato INT, @cod_horarioEntrada_fato INT, @cod_horarioSaida_fato INT,
 				@cod_aluno_fato INT, @cod_empresa_fato INT, @cod_faixaEtaria_fato INT, @cod_localizacao_fato INT, @cod_turno_fato INT
+		
+		
+		select @cod_aluno_fato = a.id_Aluno FROM DIM_Aluno a
+				where a.Cod_Aluno = @cod_aluno
 
+		select @cod_horarioEntrada_fato = h.Id_Horario FROM DIM_Horario h
+					where h.Cod_Horario = @cod_fluxo and h.Flag = 'ENTRADA'
+
+		select @cod_horarioSaida_fato = h.Id_Horario FROM DIM_Horario h
+					where h.Cod_Horario = @cod_fluxo and h.Flag = 'SAIDA'
+		
 		select @cod_data_fato = t.Id_Tempo FROM DIM_Tempo t
 											where t.Data = @h_entrada
 		
-		IF (NOT EXISTS (select h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'))
-			BEGIN
-			/* O QUE COLOCAR NO CAMPO DA INTERROGACAO: ??????????? */
-			INSERT INTO DIM_Horario(Cod_Horario, Hora, Minuto, Flag) VALUES (????, DATEPART(hh,@h_entrada), DATEPART(mi,@h_entrada), 'ENTRADA')
-			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'
-			END
-		ELSE
-			BEGIN
-			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'
-			END
-
-		IF (NOT EXISTS (select h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'))
-			BEGIN
-			/* O QUE COLOCAR NO CAMPO DA INTERROGACAO: ??????????? */
-			INSERT INTO DIM_Horario(Cod_Horario, Hora, Minuto, Flag) VALUES (????, DATEPART(hh,@h_entrada), DATEPART(mi,@h_entrada), 'SAIDA')
-			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'
-			END
-		ELSE
-			BEGIN
-			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
-							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'
-			END
-
 		select @cod_data_fato = a.id_aluno FROM DIM_Aluno a
 				where a.Cod_Aluno = @cod_aluno
 
 		select @cod_empresa_fato = max(e.id_empresa) FROM DIM_Empresa e
 				where e.Cod_Empresa = @cod_empresa
-
+				
 		DECLARE @ano_nascimento INT, @idade INT
 		select @ano_nascimento = YEAR(u.USU_DataNascimento) FROM TB_Usuario u
 												INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
@@ -215,14 +241,14 @@ BEGIN
 					where fe.FaixaEtaria = 'Idoso'
 			end
 
-		DECLARE @cod_endereco_fato INT, @cod_endereco INT
+		DECLARE @cod_endereco INT
 
 		select @cod_endereco = e.END_Codigo from TB_Usuario u
 							INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
 							INNER JOIN TB_Endereco e ON (e.END_Codigo = u.END_Codigo)
 							where a.ALU_Codigo = @cod_aluno
 	
-		select @cod_endereco_fato = l.Cod_Localizacao FROM DIM_Localizacao l
+		select @cod_localizacao_fato = l.Id_Localizacao FROM DIM_Localizacao l
 				where l.Cod_Localizacao = @cod_endereco
 				
 		select @cod_turno_fato = t.Id_Turno FROM DIM_Turno t
@@ -236,10 +262,9 @@ BEGIN
 					   Cod_Empresa = @cod_empresa_fato AND Cod_FaixaEtaria = @cod_faixaEtaria_fato                   AND
 					   Cod_Localizacao = @cod_localizacao_fato AND Cod_Turno = @cod_turno_fato)
 		
-		INSERT INTO FATO_Fluxo(Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno, Quantidade)
-					VALUES (@cod_data_fato, @cod_horarioEntrada_fato, @cod_horarioSaida_fato, @cod_aluno_fato, @cod_empresa_fato, @cod_faixaEtaria_fato, @cod_localizacao_fato, @cod_turno_fato, 1)
+		INSERT INTO FATO_Fluxo(Cod_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno, Quantidade)
+					VALUES (@cod_fluxo, @cod_data_fato, @cod_horarioEntrada_fato, @cod_horarioSaida_fato, @cod_aluno_fato, @cod_empresa_fato, @cod_faixaEtaria_fato, @cod_localizacao_fato, @cod_turno_fato, 1)
 				
-
 		FETCH C_Cursor INTO @cod_fluxo, @h_entrada, @h_saida, @cod_aluno, @cod_empresa, @cod_turno
 		END 
 	
@@ -247,3 +272,8 @@ BEGIN
 	CLOSE C_Cursor
 	DEALLOCATE C_CURSOR
 END
+
+select * from TB_AUX_FLUXO
+/* confiram a data do tb_aux_fluxo para executar a data certa no procedimento */
+EXEC SP_FATO_Fluxo '20170902'
+select * from FATO_Fluxo

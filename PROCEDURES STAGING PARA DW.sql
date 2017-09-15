@@ -138,3 +138,112 @@ END
 INSERT INTO DIM_FAIXAETARIA VALUES('Jovem')
 INSERT INTO DIM_FAIXAETARIA VALUES('Adulto')
 INSERT INTO DIM_FAIXAETARIA VALUES('Idoso')
+*/
+CREATE PROCEDURE DIM_Fluxo(@DataCarga DATETIME)
+AS
+BEGIN
+	DECLARE C_Cursor CURSOR FOR
+					SELECT f.FLU_Codigo, f.FLU_HorarioEntrada, f.FLU_HorarioSaida,
+						        f.FLU_CodAluno, f.FLU_CodEmpresa, f.FLU_CodTurno FROM TB_AUX_FLUXO f
+								WHERE f.DATA_CARGA = @DataCarga
+
+	DECLARE @cod_fluxo INT, @h_entrada DATETIME, @h_saida DATETIME, @cod_aluno INT, @cod_empresa INT, @cod_turno INT
+	OPEN C_Cursor
+
+	FETCH C_Cursor INTO @cod_fluxo, @h_entrada, @h_saida, @cod_aluno, @cod_empresa, @cod_turno
+	
+	WHILE (@@FETCH_STATUS = 0)
+		BEGIN
+		DECLARE @id_fato_fluxo INT, @cod_fluxo_fato INT, @cod_data_fato INT, @cod_horarioEntrada_fato INT, @cod_horarioSaida_fato INT,
+				@cod_aluno_fato INT, @cod_empresa_fato INT, @cod_faixaEtaria_fato INT, @cod_localizacao_fato INT, @cod_turno_fato INT
+
+		select @cod_data_fato = t.Id_Tempo FROM DIM_Tempo t
+											where t.Data = @h_entrada
+		
+		IF (NOT EXISTS (select h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'))
+			BEGIN
+			/* O QUE COLOCAR NO CAMPO DA INTERROGACAO: ??????????? */
+			INSERT INTO DIM_Horario(Cod_Horario, Hora, Minuto, Flag) VALUES (????, DATEPART(hh,@h_entrada), DATEPART(mi,@h_entrada), 'ENTRADA')
+			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'
+			END
+		ELSE
+			BEGIN
+			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_entrada)) AND h.Minuto = (SELECT DATEPART(mi,@h_entrada)) AND h.Flag = 'ENTRADA'
+			END
+
+		IF (NOT EXISTS (select h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'))
+			BEGIN
+			/* O QUE COLOCAR NO CAMPO DA INTERROGACAO: ??????????? */
+			INSERT INTO DIM_Horario(Cod_Horario, Hora, Minuto, Flag) VALUES (????, DATEPART(hh,@h_entrada), DATEPART(mi,@h_entrada), 'SAIDA')
+			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'
+			END
+		ELSE
+			BEGIN
+			select @cod_horarioEntrada_fato = h.id_Horario FROM DIM_Horario h
+							where h.hora = (SELECT DATEPART(hh,@h_saida)) AND h.Minuto = (SELECT DATEPART(mi,@h_saida)) AND h.Flag = 'SAIDA'
+			END
+
+		select @cod_data_fato = a.id_aluno FROM DIM_Aluno a
+				where a.Cod_Aluno = @cod_aluno
+
+		select @cod_empresa_fato = max(e.id_empresa) FROM DIM_Empresa e
+				where e.Cod_Empresa = @cod_empresa
+
+		DECLARE @ano_nascimento INT, @idade INT
+		select @ano_nascimento = YEAR(u.USU_DataNascimento) FROM TB_Usuario u
+												INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
+												where a.ALU_Codigo = @cod_aluno
+		SET @idade = YEAR(GETDATE()) - @ano_nascimento
+		IF (@idade <= 21)
+			begin
+			select @cod_faixaEtaria_fato = fe.Id_FaixaEtaria FROM DIM_FaixaEtaria fe
+					where fe.FaixaEtaria = 'Jovem'
+			end
+		ELSE IF (@idade > 21 and @idade < 60)
+			begin
+			select @cod_faixaEtaria_fato = fe.Id_FaixaEtaria FROM DIM_FaixaEtaria fe
+					where fe.FaixaEtaria = 'Adulto'
+			end
+		ELSE IF (@idade >= 60)
+			begin
+			select @cod_faixaEtaria_fato = fe.Id_FaixaEtaria FROM DIM_FaixaEtaria fe
+					where fe.FaixaEtaria = 'Idoso'
+			end
+
+		DECLARE @cod_endereco_fato INT, @cod_endereco INT
+
+		select @cod_endereco = e.END_Codigo from TB_Usuario u
+							INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
+							INNER JOIN TB_Endereco e ON (e.END_Codigo = u.END_Codigo)
+							where a.ALU_Codigo = @cod_aluno
+	
+		select @cod_endereco_fato = l.Cod_Localizacao FROM DIM_Localizacao l
+				where l.Cod_Localizacao = @cod_endereco
+				
+		select @cod_turno_fato = t.Id_Turno FROM DIM_Turno t
+			where t.Cod_Turno = @cod_turno
+
+		DECLARE @CONTADOR INT, @ID INT
+		
+		DELETE FROM FATO_Fluxo
+				WHERE (Cod_Aluno = @cod_aluno_fato AND Cod_Data = @cod_data_fato AND Cod_Empresa = @cod_empresa_fato AND
+					   Cod_HorarioEntrada = @cod_horarioEntrada_fato AND Cod_HorarioSaida = @cod_horarioSaida_fato   AND
+					   Cod_Empresa = @cod_empresa_fato AND Cod_FaixaEtaria = @cod_faixaEtaria_fato                   AND
+					   Cod_Localizacao = @cod_localizacao_fato AND Cod_Turno = @cod_turno_fato)
+		
+		INSERT INTO FATO_Fluxo(Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno, Quantidade)
+					VALUES (@cod_data_fato, @cod_horarioEntrada_fato, @cod_horarioSaida_fato, @cod_aluno_fato, @cod_empresa_fato, @cod_faixaEtaria_fato, @cod_localizacao_fato, @cod_turno_fato, 1)
+				
+
+		FETCH C_Cursor INTO @cod_fluxo, @h_entrada, @h_saida, @cod_aluno, @cod_empresa, @cod_turno
+		END 
+	
+
+	CLOSE C_Cursor
+	DEALLOCATE C_CURSOR
+END

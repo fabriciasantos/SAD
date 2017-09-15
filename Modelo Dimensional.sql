@@ -100,7 +100,7 @@ CREATE TABLE DIM_Turno (
 --             DIMENSÃO FATO FLUXO
 -----------------------------------------------------
 CREATE TABLE FATO_Fluxo (
-  id_FATO_Fluxo INT NOT NULL,
+  id_FATO_Fluxo INT NOT NULL IDENTITY(1,1),
   Cod_Fluxo INT NOT NULL,
   Cod_Data INT NOT NULL,
   Cod_HorarioEntrada INT NOT NULL,

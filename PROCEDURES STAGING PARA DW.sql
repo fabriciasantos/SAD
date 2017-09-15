@@ -77,3 +77,44 @@ select * from TB_AUX_ALUNO
 EXEC SP_DIM_ALUNO '20170102'
 select * from DIM_Aluno
 */
+
+/*  PROCEDIMENTO PARA A DIMENSAO TURNO */
+ALTER PROCEDURE SP_DIM_TURNO(@DataCarga DATETIME)
+AS
+BEGIN
+	
+	Declare C_Cursor CURSOR FOR
+					select TUR_Codigo, TUR_Nome from TB_AUX_TURNO
+							where DATA_CARGA = @DataCarga
+	
+	DECLARE @codigo INT, @nome varchar(45), @contador INT
+	OPEN C_Cursor
+	FETCH C_Cursor INTO @codigo, @nome
+	WHILE (@@FETCH_STATUS = 0)
+		BEGIN
+		
+		select @contador =  count(t.Cod_Turno) from DIM_Turno t
+			  where t.Cod_Turno = @codigo 			
+
+		IF (@contador = 0)
+			begin
+			INSERT INTO DIM_Turno(Cod_Turno,NomeTurno) VALUES (@codigo, @nome)
+			end
+		else
+			begin
+			UPDATE DIM_Turno SET NomeTurno = @nome
+					where Cod_Turno = @codigo
+			end
+		FETCH C_Cursor INTO @codigo, @nome
+		END
+
+	CLOSE C_Cursor
+	DEALLOCATE C_Cursor
+
+END
+
+/*
+select * from TB_AUX_TURNO
+exec sp_dim_turno '02-01-2017'
+select * from dim_turno
+*/

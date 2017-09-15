@@ -3,36 +3,37 @@
  *
 */
 -- DIMENSÃO EMPRESA TIPO 2
-create procedure SP_DIM_ACADEMIA (@datacarga datetime) as
-begin
-	declare @nome varchar(60), @nomeA varchar(60), @codigo int
+CREATE PROCEDURE SP_DIM_ACADEMIA (@DATACARGA DATETIME) AS
+BEGIN
+	DECLARE @NOME VARCHAR(60), @NOMEA VARCHAR(60), @CODIGO INT
 	
-	declare CR_VARRE_AUX cursor for 
-	select a.EMP_Nome, a.EMP_Codigo from TB_AUX_ACADEMIA a where a.DATA_CARGA = @datacarga
+	DECLARE CR_VARRE_AUX CURSOR FOR
+SELECT a.EMP_Nome, a.EMP_Codigo from TB_AUX_ACADEMIA a WHERE a.DATA_CARGA = @DATACARGA
 
-	open CR_VARRE_AUX
-	fetch CR_VARRE_AUX into @nome, @codigo
-	while(@@FETCH_STATUS = 0)
-	begin
-		if(exists(select E.Cod_Empresa from DIM_Empresa E where E.Cod_Empresa = @codigo and E.FLAG = 'SIM'))
-		begin
-			set @nomeA = (select E.NomeEmpresa from DIM_Empresa E where E.Cod_Empresa = @codigo and E.FLAG = 'SIM')
-			if(@nome <> @nomeA)
-			begin
-				update DIM_Empresa set FLAG = 'NÃO', DT_FIM = @datacarga where Cod_Empresa = @codigo and FLAG = 'SIM'
-				insert into DIM_EMPRESA values(@codigo,@nome,@datacarga,null,'SIM')
-			end
-		end
-		else
-		begin
-			insert into DIM_EMPRESA values(@codigo,@nome,@datacarga,null,'SIM')
-		end
-		fetch CR_VARRE_AUX into @nome, @codigo
-	end
-	close CR_VARRE_AUX
-	deallocate CR_VARRE_AUX
+	OPEN CR_VARRE_AUX
+	FETCH CR_VARRE_AUX INTO @NOME, @CODIGO
+	WHILE(@@FETCH_STATUS = 0)
+	BEGIN
+		IF(EXISTS(SELECT E.Cod_Empresa FROM DIM_Empresa E where E.Cod_Empresa = @codigo and E.FLAG = 'SIM'))
+		BEGIN
+			SET @NOMEA = (SELECT E.NomeEmpresa FROM DIM_Empresa E WHERE E.Cod_Empresa = @codigo and E.FLAG = 'SIM')
+			IF(@NOME <> @NOMEA)
+			BEGIN
+				UPDATE DIM_EMPRESA SET FLAG = 'NÃO', DT_FIM = @DATACARGA WHERE Cod_Empresa = @CODIGO AND FLAG = 'SIM'
+				INSERT INTO DIM_EMPRESA VALUES(@CODIGO,@NOME,@DATACARGA,NULL,'SIM')
+			END
+		END
+		ELSE
+		BEGIN
+			INSERT INTO DIM_EMPRESA VALUES(@CODIGO,@NOME,@DATACARGA,NULL,'SIM')
+		END
+		FETCH CR_VARRE_AUX INTO @NOME, @CODIGO
+	END
+	CLOSE CR_VARRE_AUX
+	DEALLOCATE CR_VARRE_AUX
 
-end
+END
+
 /*
 update TB_AUX_ACADEMIA set EMP_Nome = 'Academia Form and Muscle' where EMP_Codigo = 1
 select * from TB_AUX_ACADEMIA
@@ -41,35 +42,35 @@ select * from DIM_Empresa
 */
 
 -- DIMENSÃO ALUNO TIPO 1
-alter procedure SP_DIM_ALUNO (@datacarga datetime) as
-begin
-	declare @nome varchar(60), @nomeA varchar(60), @codigo int
+ALTER PROCEDURE SP_DIM_ALUNO (@DATACARGA DATETIME) AS
+BEGIN
+	DECLARE @NOME VARCHAR(60), @NOMEA VARCHAR(60), @CODIGO INT
 	
-	declare CR_VARRE_AUX_ALUNO cursor for 
-	select a.ALU_Nome, a.ALU_Codigo from TB_AUX_ALUNO a where a.DATA_CARGA = @datacarga
+	DECLARE CR_VARRE_AUX_ALUNO CURSOR FOR 
+	SELECT a.ALU_Nome, a.ALU_Codigo FROM TB_AUX_ALUNO a WHERE a.DATA_CARGA = @DATACARGA
 
-	open CR_VARRE_AUX_ALUNO
-	fetch CR_VARRE_AUX_ALUNO into @nome, @codigo
-	while(@@FETCH_STATUS = 0)
-	begin
-		if(exists(select A.Cod_Aluno from DIM_Aluno A where A.Cod_Aluno = @codigo))
-		begin
-			set @nomeA = (select A.NomeAluno from DIM_Aluno A where A.Cod_Aluno = @codigo)
-			if(@nome <> @nomeA)
-			begin
-				update DIM_Aluno set NomeAluno = @nome where Cod_Aluno = @codigo
-			end
-		end
-		else
-		begin
-			insert into DIM_Aluno values(@codigo,@nome)
-		end
-		fetch CR_VARRE_AUX_ALUNO into @nome, @codigo
-	end
-	close CR_VARRE_AUX_ALUNO
-	deallocate CR_VARRE_AUX_ALUNO
+	OPEN CR_VARRE_AUX_ALUNO
+	FETCH CR_VARRE_AUX_ALUNO INTO @NOME, @CODIGO
+	WHILE(@@FETCH_STATUS = 0)
+	BEGIN
+		IF(EXISTS(SELECT A.Cod_Aluno FROM DIM_Aluno A WHERE A.Cod_Aluno = @CODIGO))
+		BEGIN
+			SET @NOMEA = (SELECT A.NomeAluno FROM DIM_Aluno A WHERE A.Cod_Aluno = @CODIGO)
+			IF(@NOME <> @NOMEA)
+			BEGIN
+				UPDATE DIM_ALUNO SET NomeAluno = @NOME WHERE Cod_Aluno = @CODIGO
+			END
+		END
+		ELSE
+		BEGIN
+			INSERT INTO DIM_ALUNO VALUES(@CODIGO,@NOME)
+		END
+		FETCH CR_VARRE_AUX_ALUNO INTO @NOME, @CODIGO
+	END
+	CLOSE CR_VARRE_AUX_ALUNO
+	DEALLOCATE CR_VARRE_AUX_ALUNO
 
-end
+END
 
 /*
 update TB_AUX_ALUNO set ALU_Nome = 'Ana Freitas Santos' where ALU_Codigo = 1
@@ -77,3 +78,29 @@ select * from TB_AUX_ALUNO
 EXEC SP_DIM_ALUNO '20170102'
 select * from DIM_Aluno
 */
+
+
+/*DIMENSÃO LOCALIZAÇÃO*/
+CREATE PROCEDURE SP_DIM_LOCALIZACAO (@DATA DATETIME) AS
+BEGIN
+	DECLARE @LOC_Codigo INT,@LOC_Estado VARCHAR(45),@LOC_Cidade VARCHAR(45),@Loc_Bairro VARCHAR(45)
+	DECLARE CR_INSERT_DIMLOCALIZACAO CURSOR FOR 
+	SELECT LOC_Codigo, LOC_Estado, LOC_Cidade, Loc_Bairro FROM TB_AUX_LOCALIZACAO WHERE @DATA = DATA_CARGA
+	OPEN CR_INSERT_DIMLOCALIZACAO
+	FETCH CR_INSET_DIMLOCALIZACAO INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
+	WHILE(@@FETCH_STATUS = 0)
+	BEGIN
+		IF(EXISTS(SELECT LOC_Codigo FROM DIM_LOCALIZACAO WHERE @LOC_Codigo = Cod_Localizacao))
+			UPDATE DIM_LOCALIZAÇÃO SET LOC_Estado = @LOC_Estado, LOC_Cidade = @LOC_Cidade, LOC_Bairro = @Loc_Bairro WHERE LOC_Codigo = @LOC_Codigo	 
+		ELSE
+			INSERT INTO DIM_LOCALIZACAO(LOC_Codigo, LOC_Estado, LOC_Cidade, LOC_Bairro) VALUES(@LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro)
+		FETCH CR_INSET_DIMLOCALIZACAO INTO @LOC_Codigo, @LOC_Estado, @LOC_Cidade, @Loc_Bairro
+	END
+	CLOSE CR_INSET_DIMLOCALIZACAO
+	DEALLOCATE CR_INSET_DIMLOCALIZACAO
+END
+
+/*INSERT PARA A DIMENSÃO FAIXA ETARIA*/
+INSERT INTO DIM_FAIXAETARIA VALUES('Jovem')
+INSERT INTO DIM_FAIXAETARIA VALUES('Adulto')
+INSERT INTO DIM_FAIXAETARIA VALUES('Idoso')

@@ -277,3 +277,38 @@ select * from TB_AUX_FLUXO
 /* confiram a data do tb_aux_fluxo para executar a data certa no procedimento */
 EXEC SP_FATO_Fluxo '20170902'
 select * from FATO_Fluxo
+
+
+/* TRIGGER PARA O AGREGADO */
+go
+create trigger TG_AGR_FLUXO on FATO_FLUXO
+after insert
+as
+begin
+	declare @codigo int, @data datetime, @codMes int, @mes int, @ano int
+
+	declare CR_PREENCHE cursor for
+	select i.Cod_Empresa, i.Cod_Data from inserted i
+
+	open CR_PREENCHE
+	fetch CR_PREENCHE into @codigo, @data
+	while(@@FETCH_STATUS = 0)
+	begin
+
+	set @mes = DATEPART(MM, @data)
+	set @ano = DATEPART(YYYY, @data)
+	set @codMes = (select t.Id_Tempo from DIM_Tempo t where t.Mes = @mes and t.Nivel = 'MES' and t.Ano = @ano)
+
+	if(exists(select a.Cod_Data from AGR_FLUXO_EMPRESA a where a.Cod_Data = @codMes and a.Cod_Empresa = @codigo))
+		update AGR_FLUXO_EMPRESA set Quantidade = Quantidade + 1 where Cod_Data = @codMes and Cod_Empresa = @codigo
+	else
+		insert into AGR_FLUXO_EMPRESA values(@codMes,@codigo,1)
+
+		fetch CR_PREENCHE into @codigo, @data
+	end
+	close CR_PREENCHE
+	deallocate CR_PREENCHE
+end
+go
+
+select *from AGR_FLUXO_EMPRESA

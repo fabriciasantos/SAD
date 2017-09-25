@@ -1,6 +1,5 @@
 DROP TABLE DIM_Tempo
 DROP TABLE DIM_Empresa
-DROP TABLE DIM_Pacote
 DROP TABLE DIM_Aluno
 DROP TABLE DIM_FaixaEtaria
 DROP TABLE DIM_Localizacao
@@ -38,7 +37,10 @@ CREATE TABLE DIM_Tempo(
  CREATE TABLE DIM_Empresa (
   Id_Empresa INT NOT NULL IDENTITY(1,1),
   Cod_Empresa INT NULL,
-  NomeEmpresa VARCHAR(45) NULL)
+  NomeEmpresa VARCHAR(45) NULL,
+  DT_INICIO datetime null,
+  DT_FIM datetime null,
+  FLAG char(3) check (FLAG in('SIM','NÃO')))
 
   ALTER TABLE DIM_Empresa ADD CONSTRAINT PK_DIM_EMPRESA PRIMARY KEY (Id_Empresa) 
 
@@ -98,7 +100,7 @@ CREATE TABLE DIM_Turno (
 --             DIMENSÃO FATO FLUXO
 -----------------------------------------------------
 CREATE TABLE FATO_Fluxo (
-  id_FATO_Fluxo INT NOT NULL,
+  id_FATO_Fluxo INT NOT NULL IDENTITY(1,1),
   Cod_Fluxo INT NOT NULL,
   Cod_Data INT NOT NULL,
   Cod_HorarioEntrada INT NOT NULL,
@@ -110,7 +112,7 @@ CREATE TABLE FATO_Fluxo (
   Cod_Turno INT NOT NULL,
   Quantidade INT NULL)
 
-  ALTER TABLE FATO_Fluxo ADD CONSTRAINT PK_FATO_FLUXO PRIMARY KEY (id_FATO_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Pacote, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno)
+  ALTER TABLE FATO_Fluxo ADD CONSTRAINT PK_FATO_FLUXO PRIMARY KEY (id_FATO_Fluxo, Cod_Data, Cod_HorarioEntrada, Cod_HorarioSaida, Cod_Aluno, Cod_Empresa, Cod_FaixaEtaria, Cod_Localizacao, Cod_Turno)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TEMPO FOREIGN KEY (Cod_Data) REFERENCES DIM_Tempo (id_Tempo)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_ALUNO FOREIGN KEY (Cod_Aluno) REFERENCES DIM_Aluno (id_Aluno)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_EMPRESA FOREIGN KEY (Cod_Empresa) REFERENCES DIM_Empresa (Id_Empresa)
@@ -119,4 +121,16 @@ CREATE TABLE FATO_Fluxo (
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO1 FOREIGN KEY (Cod_HorarioEntrada) REFERENCES DIM_Horario (Id_Horario)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_HORARIO2 FOREIGN KEY (Cod_HorarioSaida) REFERENCES DIM_Horario (Id_Horario)
   ALTER TABLE FATO_Fluxo ADD CONSTRAINT FK_DIM_TURNO FOREIGN KEY (Cod_Turno) REFERENCES DIM_Turno (Id_Turno)   
-  
+
+-----------------------------------------------------
+--             DIMENSÃO AGREGADO FLUXO_EMPRESA mensal
+-----------------------------------------------------
+CREATE TABLE AGR_FLUXO_EMPRESA (
+  id_AGR_FLUXO INT NOT NULL IDENTITY(1,1),
+  Cod_Data INT NOT NULL, 
+  Cod_Empresa INT NOT NULL,
+  Quantidade INT NULL)
+
+  ALTER TABLE AGR_FLUXO_EMPRESA ADD CONSTRAINT PK_FLUXO_EMPRESA PRIMARY KEY (id_AGR_FLUXO, Cod_Data, Cod_Empresa)
+  ALTER TABLE AGR_FLUXO_EMPRESA ADD CONSTRAINT FK_TEMPO_MENSAL FOREIGN KEY (Cod_Data) REFERENCES DIM_Tempo (id_Tempo)
+  ALTER TABLE AGR_FLUXO_EMPRESA ADD CONSTRAINT FK_DIM_EMPRESAS FOREIGN KEY (Cod_Empresa) REFERENCES DIM_Empresa (Id_Empresa)   

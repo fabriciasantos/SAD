@@ -15,6 +15,18 @@ CREATE TABLE TB_Endereco (
 
 ALTER TABLE TB_Endereco ADD CONSTRAINT PK_ENDERECO_CODIGO PRIMARY KEY (END_Codigo)
 -----------------------------------------------------
+--             TABELA ACADEMIA
+-----------------------------------------------------
+CREATE TABLE TB_Academia (
+  ACA_Codigo INT NOT NULL,
+  ACA_RazaoSocial VARCHAR(45) NULL,
+  END_Codigo INT NOT NULL,
+  ACA_Cnpj VARCHAR(30) NULL)
+  
+  ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
+  ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
+
+-----------------------------------------------------
 --             TABELA USUARIO
 -----------------------------------------------------
 CREATE TABLE TB_Usuario (
@@ -34,19 +46,6 @@ CREATE TABLE TB_Usuario (
 ALTER TABLE TB_Usuario ADD CONSTRAINT PK_USUARIO_CODIGO PRIMARY KEY (USU_Codigo)
 ALTER TABLE TB_Usuario ADD CONSTRAINT FK_TB_ENDERECO_END_CODIGO FOREIGN KEY(END_Codigo) REFERENCES TB_Endereco(END_Codigo)
 ALTER TABLE TB_Usuario ADD CONSTRAINT FK_ACA_CODIGO FOREIGN KEY (ACA_Codigo) REFERENCES TB_ACADEMIA (ACA_Codigo)
-
-
------------------------------------------------------
---             TABELA ACADEMIA
------------------------------------------------------
-CREATE TABLE TB_Academia (
-  ACA_Codigo INT NOT NULL,
-  ACA_RazaoSocial VARCHAR(45) NULL,
-  END_Codigo INT NOT NULL,
-  ACA_Cnpj VARCHAR(30) NULL)
-  
-  ALTER TABLE TB_Academia ADD CONSTRAINT PK_TB_ACADEMIA PRIMARY KEY (ACA_Codigo)
-  ALTER TABLE TB_Academia ADD CONSTRAINT FK_END_COD FOREIGN KEY (END_Codigo) REFERENCES TB_Endereco (END_Codigo)
 
 -----------------------------------------------------
 --             TABELA ALUNO

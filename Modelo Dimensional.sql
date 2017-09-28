@@ -1,3 +1,4 @@
+/*
 DROP TABLE DIM_Tempo
 DROP TABLE DIM_Empresa
 DROP TABLE DIM_Aluno
@@ -6,7 +7,7 @@ DROP TABLE DIM_Localizacao
 DROP TABLE DIM_Horario
 DROP TABLE DIM_Turno
 DROP TABLE FATO_Fluxo
-
+*/
 -----------------------------------------------------
 --             DIMENSÃO TEMPO
 -----------------------------------------------------

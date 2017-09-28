@@ -34,7 +34,7 @@ INSERT INTO TB_ACADEMIA(ACA_Codigo,END_Codigo, ACA_RazaoSocial) VALUES (3,6,'Aca
 
 
 /* REGISTROS DE USUARIOS COM ENDERECOS DE ARACAJU */
-		
+
 INSERT INTO TB_Usuario(USU_NOME, USU_Rg, USU_Cpf, USU_DataNascimento, USU_Email, END_Codigo, ACA_Codigo)
 				VALUES('Luis Barreto', '271117813','960.530.119-91','16/11/1958','luis@dominio.com.br', 4, 1)
 
@@ -319,4 +319,5 @@ TESTE
 EXEC SP_POVOAMENTO_TBFLUXO '02-09-2017','05-09-2017' 
 
 select * from TB_Fluxo
+
 */

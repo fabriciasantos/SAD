@@ -287,7 +287,6 @@ BEGIN
 		DECLARE @id_fato_fluxo INT, @cod_data_fato INT, @cod_horarioEntrada_fato INT, @cod_horarioSaida_fato INT,
 				@cod_aluno_fato INT, @cod_empresa_fato INT, @cod_faixaEtaria_fato INT, @cod_localizacao_fato INT, @cod_turno_fato INT
 		
-		
 		select @cod_aluno_fato = a.id_Aluno FROM DIM_Aluno a
 				where a.Cod_Aluno = @cod_aluno
 
@@ -305,7 +304,7 @@ BEGIN
 
 		select @cod_empresa_fato = max(e.id_empresa) FROM DIM_Empresa e
 				where e.Cod_Empresa = @cod_empresa
-				
+		
 		DECLARE @ano_nascimento INT, @idade INT
 		select @ano_nascimento = YEAR(u.USU_DataNascimento) FROM TB_Usuario u
 												INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
@@ -359,10 +358,10 @@ BEGIN
 	DEALLOCATE C_CURSOR
 END
 
-/*select * from TB_AUX_FLUXO
+/*select COUNT(*) from TB_AUX_FLUXO
 /* confiram a data do tb_aux_fluxo para executar a data certa no procedimento */
 EXEC SP_FATO_Fluxo '20170902'
-select * from FATO_Fluxo*/
+select COUNT(*) from FATO_Fluxo*/
 
 
 /* TRIGGER PARA O AGREGADO */

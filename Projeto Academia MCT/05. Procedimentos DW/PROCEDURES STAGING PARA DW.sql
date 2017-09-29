@@ -263,7 +263,8 @@ begin
 		end
 	end	
 end
-/*exec SP_Dim_Tempo '20160101', '20180101'
+/*
+exec SP_Dim_Tempo '20160101', '20180101'
 truncate table DIM_TEMPO
 select * from DIM_Tempo
 */
@@ -287,7 +288,6 @@ BEGIN
 		DECLARE @id_fato_fluxo INT, @cod_data_fato INT, @cod_horarioEntrada_fato INT, @cod_horarioSaida_fato INT,
 				@cod_aluno_fato INT, @cod_empresa_fato INT, @cod_faixaEtaria_fato INT, @cod_localizacao_fato INT, @cod_turno_fato INT
 		
-		
 		select @cod_aluno_fato = a.id_Aluno FROM DIM_Aluno a
 				where a.Cod_Aluno = @cod_aluno
 
@@ -305,7 +305,7 @@ BEGIN
 
 		select @cod_empresa_fato = max(e.id_empresa) FROM DIM_Empresa e
 				where e.Cod_Empresa = @cod_empresa
-				
+		
 		DECLARE @ano_nascimento INT, @idade INT
 		select @ano_nascimento = YEAR(u.USU_DataNascimento) FROM TB_Usuario u
 												INNER JOIN TB_Aluno a ON (a.USU_Codigo = u.USU_Codigo)
@@ -359,19 +359,19 @@ BEGIN
 	DEALLOCATE C_CURSOR
 END
 
-/*select * from TB_AUX_FLUXO
+/*select COUNT(*) from TB_AUX_FLUXO
 /* confiram a data do tb_aux_fluxo para executar a data certa no procedimento */
 EXEC SP_FATO_Fluxo '20170902'
+truncate table FATO_FLUXO
 select * from FATO_Fluxo*/
-
-
+select  * from DIM_Tempo
 /* TRIGGER PARA O AGREGADO */
 go
 create trigger TG_AGR_FLUXO on FATO_FLUXO
 after insert
 as
 begin
-	declare @codigo int, @data datetime, @codMes int, @mes int, @ano int
+	declare @codigo int, @data int, @codMes int, @mes int, @ano int
 
 	declare CR_PREENCHE cursor for
 	select i.Cod_Empresa, i.Cod_Data from inserted i
@@ -381,8 +381,8 @@ begin
 	while(@@FETCH_STATUS = 0)
 	begin
 
-	set @mes = DATEPART(MM, @data)
-	set @ano = DATEPART(YYYY, @data)
+	set @mes = DATEPART(MM, (select t.Data from DIM_TEMPO t where t.id_tempo = @data))
+	set @ano = DATEPART(YYYY, (select t.Data from DIM_TEMPO t where t.id_tempo = @data))
 	set @codMes = (select t.Id_Tempo from DIM_Tempo t where t.Mes = @mes and t.Nivel = 'MES' and t.Ano = @ano)
 
 	if(exists(select a.Cod_Data from AGR_FLUXO_EMPRESA a where a.Cod_Data = @codMes and a.Cod_Empresa = @codigo))
@@ -390,11 +390,9 @@ begin
 	else
 		insert into AGR_FLUXO_EMPRESA values(@codMes,@codigo,1)
 
-		fetch CR_PREENCHE into @codigo, @data
+	fetch CR_PREENCHE into @codigo, @data
 	end
 	close CR_PREENCHE
 	deallocate CR_PREENCHE
 end
 go
-
-select *from AGR_FLUXO_EMPRESA

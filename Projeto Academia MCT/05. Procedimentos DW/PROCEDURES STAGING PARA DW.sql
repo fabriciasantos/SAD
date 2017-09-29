@@ -364,7 +364,7 @@ END
 EXEC SP_FATO_Fluxo '20170902'
 truncate table FATO_FLUXO
 select * from FATO_Fluxo*/
-select  * from DIM_Tempo
+--select  * from DIM_Tempo
 /* TRIGGER PARA O AGREGADO */
 go
 create trigger TG_AGR_FLUXO on FATO_FLUXO

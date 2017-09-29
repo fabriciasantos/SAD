@@ -10,7 +10,7 @@ GROUP BY t.Cod_Turno, T.NomeTurno
 SELECT SUM(F.Quantidade) AS ALUNOS, T.Cod_Turno AS TURNO, f.Cod_Empresa FROM FATO_Fluxo F INNER JOIN DIM_Turno T ON t.Cod_Turno = f.Cod_Turno INNER JOIN DIM_Empresa E ON E.Id_Empresa = F.Cod_Empresa
 GROUP BY t.Cod_Turno, F.Cod_Empresa
 
-/*QUANTIDADE DE ALUNOS POR DIA  */
+/*QUANTIDADE DE ALUNOS POR DIA */
 SELECT SUM(F.Quantidade) AS ALUNOS, F.Cod_Data AS DIA FROM FATO_Fluxo F INNER JOIN DIM_Tempo T ON t.Id_Tempo = f.Cod_Data
 WHERE T.Nivel = 'DIA'
 GROUP BY F.Cod_Data
@@ -47,6 +47,7 @@ WHERE H.Flag = 'ENTRADA'
 GROUP BY H.Hora
 ORDER BY QUANTIDADE DESC
 
+/*QUAL EMPRESA TEM MAIS FLUXO NO TURNO DA NOITE*/
 SELECT F.Cod_Empresa, SUM(F.Quantidade) AS QUANTIDADE FROM FATO_Fluxo F INNER JOIN DIM_Empresa E ON E.Id_Empresa = F.Cod_Empresa INNER JOIN DIM_Turno T ON T.Id_Turno = F.Cod_Turno
 WHERE T.NomeTurno = 'Noite'
 GROUP BY F.Cod_Empresa
